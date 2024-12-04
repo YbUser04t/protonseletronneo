@@ -5,64 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Revenda de Energia Solar</title>
     <style>
-        /* Aqui estão as modificações no estilo */
+        /* Estilos gerais */
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            background-color: #f5f7fa;
             color: #333;
         }
+
+        /* Cabeçalho */
         header {
-            background-color: #4CAF50;
+            background-color: #00796b;
             color: white;
             padding: 1rem;
             text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
+
+        header h1 {
+            font-size: 2.5rem;
+        }
+
+        /* Produtos */
         main {
-            padding: 1rem;
+            padding: 2rem;
             display: flex;
             justify-content: space-around;
             flex-wrap: wrap;
+            gap: 1.5rem;
         }
+
         .product {
+            background-color: #ffffff;
             border: 1px solid #ddd;
+            border-radius: 10px;
             padding: 1rem;
             margin: 1rem;
-            width: 250px;
+            width: 280px;
             text-align: center;
-            background-color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+
         .product img {
             width: 100%;
             height: auto;
+            border-radius: 5px;
         }
+
+        .product h3 {
+            color: #00796b;
+            font-size: 1.5rem;
+        }
+
+        .product p {
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .btn {
+            background-color: #00796b;
+            color: white;
+            padding: 0.7rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background-color: #004d40;
+        }
+
+        /* Rodapé */
         footer {
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 0.5rem;
+            padding: 1rem;
             position: fixed;
             bottom: 0;
             width: 100%;
+            font-size: 0.9rem;
         }
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.5rem;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-        .btn:hover {
-            background-color: #45a049;
-        }
+
+        /* Links */
         a {
-            color: #4CAF50;
+            color: #00796b;
             text-decoration: none;
         }
+
         a:hover {
             text-decoration: underline;
+        }
+
+        /* Calculadora de Frete */
+        #freteForm {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        #freteForm input {
+            padding: 0.5rem;
+            width: 200px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 0.5rem;
+        }
+
+        #freteForm button {
+            background-color: #00796b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        #freteForm button:hover {
+            background-color: #004d40;
+        }
+
+        #resultadoFrete {
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            color: #333;
         }
     </style>
 </head>
@@ -73,15 +150,24 @@
     <main>
         <div class="product">
             <h3>Gerador Solar 300W</h3>
-            <img src="https://via.placeholder.com/200x100" alt="Gerador Solar 300W">
+            <img src="https://via.placeholder.com/200x150" alt="Gerador Solar 300W">
             <p>Preço: R$ 2.500,00</p>
             <button class="btn" onclick="adicionarAoCarrinho('Gerador Solar 300W', 2500)">Adicionar ao Carrinho</button>
         </div>
         <div class="product">
             <h3>Inversor Solar 5kW</h3>
-            <img src="https://via.placeholder.com/200x100" alt="Inversor Solar 5kW">
+            <img src="https://via.placeholder.com/200x150" alt="Inversor Solar 5kW">
             <p>Preço: R$ 3.800,00</p>
             <button class="btn" onclick="adicionarAoCarrinho('Inversor Solar 5kW', 3800)">Adicionar ao Carrinho</button>
+        </div>
+        <div id="freteForm">
+            <h3>Calculadora de Frete</h3>
+            <form>
+                <label for="cep">Informe seu CEP:</label><br>
+                <input type="text" id="cep" name="cep" placeholder="00000-000" required>
+                <button type="button" onclick="calcularFrete()">Calcular Frete</button>
+            </form>
+            <p id="resultadoFrete"></p>
         </div>
     </main>
     <footer>
@@ -89,10 +175,19 @@
     </footer>
 
     <script>
-        // Função para adicionar ao carrinho (exemplo simples)
         function adicionarAoCarrinho(produto, preco) {
-            alert(produto + " foi adicionado ao seu carrinho!");
-            // Aqui você pode armazenar as informações do carrinho para processar no pagamento
+            alert(produto + " foi adicionado ao carrinho por R$ " + preco + ",00!");
+        }
+
+        function calcularFrete() {
+            const cep = document.getElementById('cep').value;
+            if (cep) {
+                // Simulação de cálculo de frete
+                const frete = cep.startsWith('1') ? 'R$ 30,00' : 'R$ 50,00';
+                document.getElementById('resultadoFrete').innerText = 'Frete estimado: ' + frete;
+            } else {
+                alert('Por favor, insira um CEP válido!');
+            }
         }
     </script>
 </body>
